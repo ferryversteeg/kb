@@ -1,0 +1,2002 @@
+--------------------------------------------------------------------------------
+find files/folders with specific permissions
+Fri, 01 Feb 2013 08:11:14 +0000
+Show all files/folders where everybody can write:
+
+find -perm -o+w<
+u = user
+g = group
+o = other
+a = all
+--------------------------------------------------------------------------------
+Base64 encode & decode
+Fri, 06 Nov 2020 09:54:59 +0000
+Encode Linux:
+echo ""Plain text"" | base64
+Decode Linux:
+echo ""UGxhaW4gdGV4dAo="" | base64 -d
+---------
+Encode Windows (Powershell):
+[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(""Plain text""))
+Decode Windows (Powershell):
+[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""UGxhaW4gdGV4dAo=""))
+--------------------------------------------------------------------------------
+Vim / Vi convert line endings
+Fri, 06 Nov 2020 10:00:09 +0000
+DOS to Linux:
+:set ff=unix
+---
+Linix to DOS/Windows:
+:set ff=dos
+--------------------------------------------------------------------------------
+Juniper Junos commands
+Fri, 08 Mar 2013 07:58:36 +0000
+Static route
+
+set routing-options static route 0.0.0.0/0 next-hop 10.1.1.254<
+
+set routing-options static route 10.2.2.0/24 next-hop 10.1.1.254<
+Show routing table
+
+show route terse<
+
+--------------------------------------------------------------------------------
+Ubuntu remove old kernels
+Fri, 08 Nov 2013 16:33:11 +0000
+Remove old kernels:
+
+dpkg -l 'linux-*' | sed '/^ii/!d;/'""$(uname -r | sed ""s/\(.*\)-\([^0-9]\+\)/\1/"")""'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d' | xargs sudo apt-get -y purge
+--------------------------------------------------------------------------------
+No space left on device - Running out of inodes
+Fri, 12 May 2017 12:18:58 +0000
+Check disk usage:
+
+df<
+Check inodes usage:
+
+df -i<
+Count number of files in current folder (recursive):
+
+for i in ./*; do echo $i; find $i |wc -l; done
+--------------------------------------------------------------------------------
+Synology add new photos to Photo index (schedule every 4 hours)
+Fri, 14 Aug 2015 12:42:12 +0000
+
+find /volume1/photo/ ! -path ""*/@eaDir/*"" -mmin -240 -type f \( -name ""*.jpg"" -o -name ""*.JPG"" \) -exec synoindex -a {} \;
+--------------------------------------------------------------------------------
+Clean Manager on 2008R2
+Fri, 22 Mar 2013 15:17:12 +0000
+Activate Clean Manager on Windows 2008 R2:
+
+copy \Windows\winsxs\amd64_microsoft-windows-cleanmgr_31bf3856ad364e35_6.1.7600.16385_none_c9392808773cd7da\cleanmgr.exe \Windows\System32\<
+
+copy \Windows\winsxs\amd64_microsoft-windows-cleanmgr.resources_31bf3856ad364e35_6.1.7600.16385_en-us_b9cb6194b257cc63\cleanmgr.exe.mui \Windows\System32\en-US\<
+
+cleanmgr.exe
+--------------------------------------------------------------------------------
+Update DynDNS on Ubuntu (manual)
+Fri, 22 Mar 2013 15:42:47 +0000
+
+/usr/sbin/ddclient -daemon=0 -noquiet
+--------------------------------------------------------------------------------
+Start Chrome profile on Mac
+Fri, 23 Mar 2018 13:51:57 +0000
+open -a ""Google Chrome"" --args --profile-directory='Profile Name'
+Find profile name in: ~/Library/Application Support/Google/Chrome/
+--------------------------------------------------------------------------------
+Exchange 2010 Database size
+Fri, 24 May 2013 08:58:09 +0000
+
+Get-MailboxDatabase -Status | select ServerName,Name,DatabaseSize
+--------------------------------------------------------------------------------
+Create and extract gzip tar archives
+Fri, 25 Jan 2013 14:09:51 +0000
+Create:
+tar cvzf filename.tgz foldername/
+
+tar cvzf filename.tar.gz foldername/
+
+Extract:
+tar xvzf filename.tgz
+
+tar xvzf filename.tar.gz
+--------------------------------------------------------------------------------
+Use date in filename
+Fri, 25 Jan 2013 14:10:28 +0000
+mysqldump --all-databases -u root --password=1234 &gt;/backup/sql1_`date '+%d%m%y'`.sql
+--------------------------------------------------------------------------------
+Passwordless SSH
+Fri, 25 Jan 2013 14:11:32 +0000
+On computer 1:
+cd &lt;root home&gt;/.ssh
+ssh-keygen -t rsa
+cp id_rsa.pub computer1.pub
+scp computer1.pub root@computer2:/
+
+On computer 2:
+cat computer1.pub &lt;root home&gt;/.ssh/authorized_keys
+
+Add a from address in the public key for security.
+Example:
+
+from=""192.168.1.23"" ssh-rsa AAAAB3NzaC1y29JL6GHyVUMB2CSDOP99eF9g7pMliakFkZMw
+G929JL6GHcpS3LvtO+50Np4yjXYWJKh29JL6GHcp8o7+YKEyVUMB2CSDOP99eF9gQVOHsR
+ijcS3LvtO+50Np4yjXYWJKh29JLAB3NzaC1y29JL6GHyVUyVUMB2CSDOP99eF9g5Q0dB
+WQM= User1
+--------------------------------------------------------------------------------
+Copy files with specific content
+Fri, 25 Jan 2013 14:13:30 +0000
+cp -v `grep -l ""specific content"" *` /&lt;folder&gt;/
+--------------------------------------------------------------------------------
+Remove '.DS_Store' on volume
+Fri, 25 Jan 2013 14:14:20 +0000
+find /Volumes/MUSIC_SD/ -name "".DS_Store"" -depth -exec rm {} \;
+--------------------------------------------------------------------------------
+Find filename/folder
+Fri, 25 Jan 2013 14:15:10 +0000
+find . -name *text*
+--------------------------------------------------------------------------------
+Process info
+Fri, 25 Jan 2013 14:16:13 +0000
+lsof - show files opend by a process
+
+ps aux - show info about all processes
+--------------------------------------------------------------------------------
+Mysql Replication Master  Slave
+Fri, 25 Jan 2013 14:17:09 +0000
+Server 1 (192.168.1.224)
+Server 2 (192.168.1.32)
+
+Add sql user on both servers:
+name: replicator
+host: 192.168.0.0/255.255.0.0
+password: .....
+privileges : SUPER, REPLICATION SLAVE, REPLICATION CLIENT
+
+my.cnf on Server 1:
+
+[mysqld]
+server-id = 10
+auto_increment_increment = 10
+auto_increment_offset = 1
+master-host = 192.168.1.32
+master-port = 3306
+master-user = replicator
+master-password = .....
+log-slave-updates
+replicate-same-server-id = 0
+report-host = 192.168.1.224
+log-bin = mysql-bin
+relay-log = master-relay-bin
+
+my.cnf on Server 2:
+
+[mysqld]
+server-id = 20
+auto_increment_increment = 10
+auto_increment_offset = 2
+master-host = 192.168.1.224
+master-port = 3306
+master-user = replicator
+master-password = .....
+log-slave-updates
+replicate-same-server-id = 0
+report-host = 192.168.1.32
+log-bin = mysql-bin
+relay-log = slave-relay-bin
+--------------------------------------------------------------------------------
+chmod
+Fri, 25 Jan 2013 14:18:09 +0000
+u = user
+g = group
+o = other
+a = all
+
+chmod o-w test.txt
+chmod g+w test.txt
+
+
+
+chmod 4777 : (4 = u+s) : Adding the set user id or suid bit. When you run the file, you become the user/owner : rwsrwxrwx
+--------------------------------------------------------------------------------
+Serial console
+Fri, 25 Jan 2013 14:18:43 +0000
+
+cu -l /dev/&lt;device name&gt; -s 9600
+--------------------------------------------------------------------------------
+Apple battery calibration
+Fri, 25 Jan 2013 14:20:32 +0000
+PowerBook G4 (15-inch Double-Layer SD) and any model of MacBook or MacBook Pro
+
+1. Plug in the power adapter and fully charge your PowerBook's battery until the light ring or LED on the power adapter plug changes to green and the onscreen meter in the menu bar indicates that the battery is fully charged.
+2. Allow the battery to rest in the fully charged state for at least two hours. You may use your computer during this time as long as the adapter is plugged in.
+3. Disconnect the power adapter while the computer still on and start running the computer off battery power. You may use your computer during this time. When your battery gets low, the low battery warning dialog appears on the screen.
+4. At this point, save your work. Continue to use your computer; when the battery gets very low, the computer will automatically go to sleep.
+5. Turn off the computer or allow it to sleep for five hours or more.
+6. Connect the power adapter and leave it connected until the battery is fully charged again.
+
+Tip: When the battery reaches ""empty"", the computer is forced into sleep mode. The battery actually keeps back a reserve beyond ""empty"", to maintain the computer in sleep for a period of time. Once the battery is truly exhausted, the computer is forced to shut down. At this point, with the safe sleep function introduced in the PowerBook G4 (15-inch Double-Layer SD) computers, the computer's memory contents have been saved to the hard drive. When power is restored, the computer returns itself to its pre-sleep state using the safe sleep image on the hard drive.
+
+iBooks and PowerBook G4s other than the PowerBook G4 (15-inch Double-Layer SD)
+
+1. Plug the power adapter in and fully charge your computer's battery until the battery indicator lights turn off and the adapter plug light goes from amber to green, which indicates that the battery is fully charged.
+2. Disconnect the power adapter and use your iBook or PowerBook. When your battery gets low, you will see the low battery warning dialog on the screen. Continue to use your computer until it goes to sleep. At that point the battery has been sufficiently drained for calibration.
+3. Connect the power adapter and leave it connected until the battery is fully charged again.
+
+You have to fully charge and then discharge your battery only once to calibrate it. After that, you can connect and disconnect the power adapter when the battery is at any charge level.
+
+Tip: When the battery reaches ""empty"", the computer is forced into sleep mode. The battery actually holds a reserve beyond ""empty"", to maintain the computer in sleep for a period of time. Once the battery is truly exhausted, the computer is forced to shut down. At this point, any open files could be lost. Therefore, it is important that you find an electrical outlet and connect the adapter before the forced shutdown occurs.
+PowerBook G4 (15-inch Double-Layer SD), MacBook (all models), MacBook Pro (all models), MacBook Pro (17-inch) (all models) and MacBook Air
+--------------------------------------------------------------------------------
+Uninstall applications installed from packages
+Fri, 25 Jan 2013 14:21:14 +0000
+In ~/Library/Receipts or /Library/Receipts, find the name of the package. The actual bom (""bill of materials"") file is located at: /Library/Receipts/some_app.pkg/Contents/Archive.bom
+
+lsbom -fls /Library/Receipts/some_app.pkg/Contents/Archive.bom | (cd /; sudo xargs rm)
+
+This will remove the installed files, directories must be removed manually.
+--------------------------------------------------------------------------------
+Hide or unhide files and folders on OS X
+Fri, 25 Jan 2013 14:21:50 +0000
+
+chflags hidden ./test<
+
+chflags nohidden ./test
+--------------------------------------------------------------------------------
+Install Debian/Ubuntu Build Essentials
+Fri, 25 Jan 2013 14:22:37 +0000
+
+apt-get install build-essential
+--------------------------------------------------------------------------------
+System info on Linux
+Fri, 25 Jan 2013 14:23:22 +0000
+
+dmidecode
+--------------------------------------------------------------------------------
+Linux on Intel Mac Mini
+Fri, 25 Jan 2013 14:24:23 +0000
+Boot the OS X install DVD and open diskutility. Create at least two partitions; one for the root file system and one for the swap. Select 'Master Boot Record' as partition scheme.
+
+Boot the Linux install CD/DVD. Do NOT auto-partition the hard disk but reconfigure the existing partitions. The large partition will be configured as ""/"" and made bootable and the small one as swap.
+After the installation finishes install GRUB in the MBR and reboot.
+--------------------------------------------------------------------------------
+Disable .DS_Store file creation on network volumes
+Fri, 25 Jan 2013 14:25:09 +0000
+Disable .DS_Store file creation on network volumes.
+
+per user:
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+--------------------------------------------------------------------------------
+arrow keys don't work in vi or wim
+Fri, 25 Jan 2013 14:33:04 +0000
+Create file ~/.vimrc:
+
+set esckeys
+--------------------------------------------------------------------------------
+ESX 4 change management IP/Gateway/VLAN
+Fri, 25 Jan 2013 14:34:28 +0000
+Show ESX network info:
+
+esxcfg-vswif -l<
+
+esxcfg-vswitch -l<
+Change IP:
+
+esxcfg-vswif -a vswif0 -p ""Service Console"" -i 192.168.1.10 -n 255.255.255.0 -b 192.168.1.255<
+Change VLAN:
+
+esxcfg-vswitch vSwitch0 -v 11 -p “Service Console”<
+Change gateway in: /etc/sysconfig/network
+
+Restart ESX network:
+
+service network restart
+--------------------------------------------------------------------------------
+Keyboard Shortcuts for Bash shell
+Fri, 25 Jan 2013 14:35:58 +0000
+Ctrl + A Go to the beginning of the line you are currently typing on
+Ctrl + E Go to the end of the line you are currently typing on
+Ctrl + L Clears the Screen, similar to the clear command
+Ctrl + U Clears the line before the cursor position. If you are at the end of the line, clears the entire line.
+Ctrl + H Same as backspace
+Ctrl + R Let’s you search through previously used commands
+Ctrl + C Kill whatever you are running
+Ctrl + D Exit the current shell
+Ctrl + Z Puts whatever you are running into a suspended background process. fg restores it.
+Ctrl + W Delete the word before the cursor
+Ctrl + K Clear the line after the cursor
+Ctrl + T Swap the last two characters before the cursor
+Esc + T Swap the last two words before the cursor
+Alt + F Move cursor forward one word on the current line
+Alt + B Move cursor backward one word on the current line
+Tab Auto-complete files and folder names
+--------------------------------------------------------------------------------
+rsync mirror
+Fri, 25 Jan 2013 14:36:54 +0000
+
+rsync -a --delete /1/ /2<
+1 = source
+2 = destination
+--------------------------------------------------------------------------------
+ESX 4/5 iSCSI lun does not mount
+Fri, 25 Jan 2013 14:37:52 +0000
+
+esxcfg-volume -l<
+
+esxcfg-volume -m VolumeName
+--------------------------------------------------------------------------------
+Flush DNS on OS X
+Fri, 25 Jan 2013 14:38:45 +0000
+Mac OS X 10.10.4 &gt; :
+
+sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder<
+Mac OS X 10.10:
+
+sudo discoveryutil mdnsflushcache<
+Mac OS X 10.9:
+
+dscacheutil -flushcache;sudo killall -HUP mDNSResponder<
+Mac OS X 10.7 and 10.8:
+
+sudo killall -HUP mDNSResponder<
+Mac OS X 10.5 and 10.6:
+
+sudo dscacheutil -flushcache
+--------------------------------------------------------------------------------
+ESX install/update zip/bundle from CLI
+Fri, 25 Jan 2013 14:39:27 +0000
+Update/upgrade with Image Profile and zip file
+
+esxcli software profile update -d /&lt;path to datastore&gt;/&lt;zip file&gt; -p &lt;profile name&gt;<
+
+
+List profiles in zip file
+
+esxcli software sources profile list -d /&lt;path to datastore&gt;/&lt;zip file&gt;<
+
+
+Install with zip file
+
+esxcli software vib install -d /&lt;path to datastore&gt;/&lt;zip file&gt;<
+Update with zip file
+
+esxcli software vib update -d /&lt;path to datastore&gt;/&lt;zip file&gt;<
+
+
+Install vib file
+
+esxcli software vib install -v /&lt;path to datastore&gt;/&lt;vib file&gt;<
+Update vib file
+
+esxcli software vib update -v /&lt;path to datastore&gt;/&lt;vib file&gt;
+--------------------------------------------------------------------------------
+Remove user from login screen on OS X
+Fri, 25 Jan 2013 14:39:54 +0000
+Remove:
+
+sudo defaults write /Library/Preferences/com.apple.loginwindow HiddenUsersList -array-add admin<
+Undo:
+
+sudo defaults delete /Library/Preferences/com.apple.loginwindow HiddenUsersList
+--------------------------------------------------------------------------------
+Ubuntu: warning: Setting locale failed
+Fri, 25 Jan 2013 14:41:58 +0000
+Execute and add the following lines to ~/.profile:
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8<
+after that execute:
+
+locale-gen en_US.UTF-8<
+and
+
+dpkg-reconfigure locales
+--------------------------------------------------------------------------------
+Debian/Ubuntu startup script
+Fri, 27 Oct 2017 14:58:54 +0000
+Create file test.service in /etc/systemd/system/ :
+[Unit]
+Description=Test service
+
+[Service]
+ExecStart=/path/testscript.sh
+
+[Install]
+WantedBy=multi-user.target
+Reload systemd manager configuration:
+systemctl --system daemon-reload
+Start script:
+systemctl start test.service
+Stop script:
+systemctl stop test.service
+Enable script:
+systemctl enable test.service
+--------------------------------------------------------------------------------
+OS X install Command Line Tools
+Mon, 02 Nov 2015 14:00:51 +0000
+
+xcode-select --install
+--------------------------------------------------------------------------------
+Active Directory replication status
+Mon, 04 Mar 2013 15:02:59 +0000
+
+repadmin /showrepl *
+--------------------------------------------------------------------------------
+Chrome kerberos SSO (OS X)
+Mon, 06 Oct 2014 14:17:47 +0000
+
+defaults write ~/Library/Preferences/com.google.Chrome.plist AuthServerWhitelist '*.example.com'
+--------------------------------------------------------------------------------
+Replace text in multiple files
+Mon, 11 Feb 2013 14:20:27 +0000
+
+find . -type f -exec sed -i -e 's/oldtext/newtext/g' {} \;
+--------------------------------------------------------------------------------
+Replace text in multiple filenames
+Mon, 11 Feb 2013 14:27:48 +0000
+
+rename 's/oldtext/newtext/g' *
+--------------------------------------------------------------------------------
+Burn iso/dmg MacOS Catalina
+Mon, 11 May 2020 11:20:23 +0000
+hdiutil burn <disc image=""""></disc>
+--------------------------------------------------------------------------------
+Ubuntu exclude package from update
+Mon, 12 May 2014 13:36:27 +0000
+
+apt-mark hold package<
+
+apt-mark unhold package<
+List packages on hold
+
+dpkg -l | grep ""^h""
+--------------------------------------------------------------------------------
+Repair windows boot
+Mon, 15 Feb 2016 13:05:04 +0000
+bootrec /fixmbr
+
+bootrec /rebuildbcd
+
+
+error: The requested system device cannot be found
+
+bcdedit /export C:\BCDBackup
+
+Goto Windows location (C:)
+
+cd boot
+
+attrib bcd -s -h -r
+
+ren c:\boot\bcd bcd.old
+
+bootrec /RebuildBcd
+--------------------------------------------------------------------------------
+Debian 9 copy past in vi
+Mon, 18 Dec 2017 15:15:50 +0000
+add this file: /etc/vim/vimrc.local
+
+"" This file loads the default vim options at the beginning and prevents
+"" that they are being loaded again later. All other options that will be set,
+"" are added, or overwrite the default settings. Add as many options as you
+"" whish at the end of this file.
+
+"" Load the defaults
+source /usr/share/vim/vim80/defaults.vim
+
+"" Prevent the defaults from being loaded again later, if the user doesn't
+"" have a local vimrc (~/.vimrc)
+let skip_defaults_vim = 1
+
+
+"" Set more options (overwrites settings from /usr/share/vim/vim80/defaults.vim)
+"" Add as many options as you whish
+
+"" Set the mouse mode to 'r'
+if has('mouse')
+  set mouse=r
+endif
+--------------------------------------------------------------------------------
+Linux/Mac show external IP
+Mon, 18 May 2015 13:10:44 +0000
+
+
+<div id=""crayon-5559d2b2d8de6823618410-1"" class=""crayon-line""><span class=""crayon-e"">curl </span><span class=""crayon-v"">http</span><span class=""crayon-o"">:</span><span class=""crayon-o"">/</span><span class=""crayon-o"">/</span><span class=""crayon-v"">ipecho</span><span class=""crayon-e"">.net</span><span class=""crayon-o"">/</span><span class=""crayon-v"">plain</span><span class=""crayon-sy"">;</span> <span class=""crayon-r"">echo</span></div>
+--------------------------------------------------------------------------------
+Ubuntu resolve package dependency for linux-server
+Mon, 20 Jan 2014 08:43:03 +0000
+check for aborted installations:
+
+dpkg --configure -a<
+update package list:
+
+apt-get update<
+remove package:
+
+dpkg --remove linux-server<
+install current dependencies:
+
+apt-get install -f<
+install linux-server again:
+
+apt-get install linux-server
+--------------------------------------------------------------------------------
+MacOS IKEv2 VPN Process - NEIKEv2Provider
+Mon, 29 Jun 2020 20:04:46 +0000
+/System/Library/Frameworks/NetworkExtension.framework/PlugIns/NEIKEv2Provider.appex/Contents/MacOS/NEIKEv2Provider
+--------------------------------------------------------------------------------
+Google Chrome ignore certificate errors
+Sat, 11 Jul 2020 18:55:18 +0000
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors
+--------------------------------------------------------------------------------
+KPN Experiabox v8 Bridge mode on/off
+Sun, 10 Nov 2013 20:46:12 +0000
+Turn bridge mode on:
+
+http://192.168.2.254/atmint.stm/3/1<
+Turn bridge mode off:
+
+http://192.168.2.254/atmint.stm/15/4
+--------------------------------------------------------------------------------
+Arch Linux package manager
+Sun, 14 Apr 2013 12:01:09 +0000
+Search for package:
+
+pacman -Ss package<
+Search for installed package:
+
+pacman -Qs package<
+Install package:
+
+pacman -Suy package<
+Upgrade all packages:
+
+pacman -Syu
+--------------------------------------------------------------------------------
+Python virtual environment
+Sun, 20 Jan 2019 13:39:57 +0000
+create virtual environtment in current folder
+python3 -m venv .
+activate virtual environment
+source bin/activate
+deactivate virtual environment
+deactivate
+--------------------------------------------------------------------------------
+Create ESXi installation iso for OS X script
+Thu, 05 Nov 2015 11:29:21 +0000
+
+#!/bin/bash
+hdiutil attach /Volumes/Install\ macOS\ Sierra/Install\ macOS\ Sierra.app/Contents/SharedSupport/InstallESD.dmg -noverify -nobrowse -mountpoint /Volumes/install_app
+hdiutil convert /Volumes/install_app/BaseSystem.dmg -format UDSP -o /tmp/macossierra
+hdiutil resize -size 8g /tmp/macossierra.sparseimage
+hdiutil attach /tmp/macossierra.sparseimage -noverify -nobrowse -mountpoint /Volumes/install_build
+rm /Volumes/install_build/System/Installation/Packages
+cp -rp /Volumes/install_app/Packages /Volumes/install_build/System/Installation/
+cp -rp /Volumes/install_app/BaseSystem.chunklist /Volumes/install_build/BaseSystem.chunklist
+cp -rp /Volumes/install_app/BaseSystem.dmg /Volumes/install_build/BaseSystem.dmg
+hdiutil detach /Volumes/install_app
+hdiutil detach /Volumes/install_build
+hdiutil resize -size `hdiutil resize -limits /tmp/macossierra.sparseimage | tail -n 1 | awk '{ print $1 }'`b /tmp/macossierra.sparseimage
+hdiutil convert /tmp/macossierra.sparseimage -format UDTO -o /tmp/macossierra
+rm /tmp/macossierra.sparseimage
+mv /tmp/macossierra.cdr ~/Downloads/macossierra.iso<
+
+--------------------------------------------------------------------------------
+ESXi 5 stop or kill a running VM in CLI
+Thu, 05 Sep 2013 09:52:45 +0000
+Show list of running VM's
+
+esxcli vm process list<
+Stop or Kill the running VM:
+
+esxcli vm process kill -t [soft,hard,force] -w [World-ID]
+--------------------------------------------------------------------------------
+Wordpress double dash showing as one
+Thu, 06 Jun 2013 10:36:03 +0000
+Comment out the first five elements of the array (in wordpress/wp-includes/formatting.php), so that it looks like this:
+
+$static_characters = array_merge( array( /*'---', ' -- ', '--', ' - ', 'xn&amp;#8211;',*/ '...', '``', '\'\'', ' (tm)' ), $cockney );
+--------------------------------------------------------------------------------
+Onedrive Mac default with work account
+Thu, 07 Jan 2016 09:56:02 +0000
+
+defaults write com.microsoft.OneDrive-mac DefaultToBusinessFRE -bool True
+--------------------------------------------------------------------------------
+Openswan show number of active connections
+Thu, 09 May 2013 12:09:36 +0000
+
+ipsec auto --status | grep -c ""IPsec SA established""
+--------------------------------------------------------------------------------
+ESXi add job to crontab
+Thu, 13 Aug 2015 12:34:06 +0000
+edit:
+
+vi /var/spool/cron/crontabs/root<
+add:
+
+0 8 * * * /path/to/script &gt; /path/to/logfile 2&gt;&amp;1<
+kill cron daemon:
+
+kill $(cat /var/run/crond.pid)<
+start cron daemon:
+
+/usr/lib/vmware/busybox/bin/busybox crond<
+update state.tgz:
+
+auto-backup.sh<
+
+
+Rebuild crontab after reboot.
+
+edit:
+
+/etc/rc.local.d/local.sh<
+add following line after set -x (line 3):
+
+/bin/kill $(cat /var/run/crond.pid)
+/bin/echo '0 8 * * * /path/to/script &gt; /path/to/logfile 2&gt;&amp;1' &gt;&gt; /var/spool/cron/crontabs/root
+/bin/busybox crond<
+update state.tgz:
+
+auto-backup.sh
+--------------------------------------------------------------------------------
+Linux lock and unlock file/folder
+Thu, 19 Mar 2015 12:05:45 +0000
+Lock item:
+
+chattr +i &lt;item name&gt;<
+Unlock item:
+
+chattr -i &lt;item name&gt;
+--------------------------------------------------------------------------------
+Certificates openssl
+Thu, 21 Aug 2014 10:45:22 +0000
+<strong>Generate a new private key and Certificate Signing Request:</strong>
+
+openssl req -out filename.csr -new -newkey rsa:2048 -nodes -keyout filename.key -sha256<
+
+openssl req -out filename.csr -new -newkey rsa:4096 -nodes -keyout filename.key -sha256<
+<strong>Self-Sign the certificate:</strong>
+
+openssl x509 -req -days 3650 -in filename.csr -signkey filename.key -out filename.crt<
+<strong>Check a Certificate Signing Request:</strong>
+
+openssl req -text -noout -verify -in filename.csr<
+<strong>Check certificate:</strong>
+
+openssl x509 -in filename.crt -text -noout<
+<strong>Check if certificate and key match:</strong>
+
+openssl x509 -noout -modulus -in filename.crt | openssl md5 ; openssl rsa -noout -modulus -in filename.key | openssl md5<
+<strong>Convert certificate with key to PKCS#12 certificate (with Intermediate and Root certificate):</strong>
+Create new crt file like this:
+
+----- BEGIN CERT -----
+&lt; Own Certificate &gt;
+----- END CERT -----
+----- BEGIN CERT -----
+&lt; Intermediate Certificate &gt;
+----- END CERT -----
+----- BEGIN CERT -----
+&lt; Root Certificate &gt;
+----- END CERT -----
+
+sudo openssl pkcs12 -export -in combinedfilename.crt -inkey filename.key -out filename.p12<
+<strong>Check PKCS#12 certificate:</strong>
+
+openssl pkcs12 -info -in filename.p12<
+<strong>Convert PKCS#12 certificate to <strong>certificate with key:</strong></strong>
+
+openssl pkcs12 -in filename.p12 -clcerts -nokeys -out combinedfilename.cer<
+
+openssl pkcs12 -in filename.p12 -nocerts -nodes  -out filename.key<
+Generate DH parameters:
+
+sudo openssl dhparam -out dhparam.pem 2048<
+
+sudo openssl dhparam -out dhparam.pem 4096<
+
+--------------------------------------------------------------------------------
+Windows XP -> 7 Auto Login
+Thu, 24 Jan 2013 12:46:30 +0000
+control userpasswords2
+--------------------------------------------------------------------------------
+Exchange 2007 Powershell commands
+Thu, 24 Jan 2013 12:47:22 +0000
+<strong>Total item size per Mailbox to c:\mailboxsize.csv :</strong>
+Get-Mailbox -resultsize unlimited | Get-MailboxStatistics | select-object Displayname,Database,@{Name=""TotalItemSize(MB)"";Expression={$_.TotalItemSize.Value.ToMB()}} | Export-Csv -path c:\mailboxsize.csv
+
+<strong>Items not showing in Disconnected Mailbox:</strong>
+Clean-MailboxDatabase “DB1” (on all databases)
+--------------------------------------------------------------------------------
+Create bootable flash drive on Windows XP ->
+Thu, 24 Jan 2013 14:05:19 +0000
+On cmd:
+
+&gt; diskpart
+DISKPART&gt; list disk
+DISKPART&gt; select disk x
+DISKPART&gt; clean
+DISKPART&gt; create partition primary
+DISKPART&gt; select partition 1
+DISKPART&gt; active
+DISKPART&gt; format fs=fat32
+DISKPART&gt; assign
+DISKPART&gt; exit
+
+copy Windows CD/DVD ROM content to the flash drive
+
+&gt; xcopy d:\*.* /s/e/f e:\
+--------------------------------------------------------------------------------
+Windows 2008 Core Commands
+Thu, 24 Jan 2013 14:05:56 +0000
+<strong>Add IP address + DNS:</strong>
+netsh interface ipv4 show interface
+
+Look for Idx
+
+netsh interface ipv4 set address name=”Idx” source=static address=192.168.1.12 mask=255.255.255.0 gateway=192.168.1.254
+
+netsh interface ipv4 add dnsserver name=""Idx"" address=192.168.1.100 index=1
+
+<strong>Enable Remote MMC:</strong>
+netsh advfirewall firewall set rule group=”Remote Administration” new enable=yes
+
+<strong>Set Time Zone:</strong>
+control timedate.cpl
+
+<strong>Enable RDP:</strong>
+cscript C:\windows\system32\scregedit.wsf /ar 0
+
+<strong>Enable PING Replies:</strong>
+netsh firewall set icmpsetting 8
+
+<strong>Disable firewall:</strong>
+netsh firewall set opmode disable
+--------------------------------------------------------------------------------
+Windows 2008 time service
+Thu, 24 Jan 2013 14:06:35 +0000
+On de Windows PDC:
+
+w32tm /config /manualpeerlist:0.nl.pool.ntp.org,time.windows.com /syncfromflags:manual /reliable:yes /update<
+On domain clients:
+
+w32tm /config /syncfromflags:domhier /update<
+Resync Time:
+
+w32tm /resync<
+Check domain time servers:
+
+w32tm /monitor<
+Test NTP server and compare time:
+
+w32tm /stripchart /computer:0.nl.pool.ntp.org /samples:5 /dataonly
+--------------------------------------------------------------------------------
+Windows 8 Auto Login
+Thu, 24 Jan 2013 14:07:29 +0000
+<div>In Metro UI enter netplwiz</div>
+--------------------------------------------------------------------------------
+Windows 8 Change product key
+Thu, 24 Jan 2013 14:09:05 +0000
+in elevated cmd:
+
+slmgr.vbs -ipk 00000-00000-00000-00000-00000
+--------------------------------------------------------------------------------
+Google Drive blank login screen
+Thu, 24 Jan 2013 14:09:53 +0000
+Make IE8 your Default Browser.
+Goto Advanced Settings and Reset your Browser to Default Settings.
+Close IE8 and Open Chrome, make Chrome your Default Browser.
+Goto Task Manager and Kill all instances of Googledrivesync.exe
+Goto Program Files and Kick off Google Drive.
+Right Click on your Google Drive Icon in the System Tray and Select Sign in.
+--------------------------------------------------------------------------------
+Undelete Active Directory Object 2008 R2
+Thu, 24 Jan 2013 14:10:30 +0000
+<strong>Displaying the Deleted Objects container</strong>
+
+When Active Directory objects are deleted, they are placed in the Deleted Objects container. By default, the CN=Deleted Objects container is not displayed. You can use the Ldp.exe administration tool in Active Directory Domain Services (AD DS) to display the Deleted Objects container.
+
+Open Ldp.exe.
+
+On the Options menu, click Controls.
+
+In the Controls dialog box, expand the Load Predefined pull-down menu, click Return deleted objects, and then click OK.
+
+To verify that the Deleted Objects container is displayed:
+To connect and bind to the server that hosts the forest root domain of your AD DS environment, under Connections, click Connect, and then Bind.
+
+Click View, click Tree, and in BaseDN, type DC=&lt;mydomain&gt;,DC=&lt;com&gt;, where &lt;mydomain&gt; and &lt;com&gt; represent the appropriate forest root domain name of your AD DS environment.
+
+In the console tree, double-click the root distinguished name (also known as DN) and locate the CN=Deleted Objects, DC=&lt;mydomain&gt;,DC=&lt;com&gt; container, where &lt;mydomain&gt; and &lt;com&gt; represent the appropriate forest root domain name of your AD DS environment.
+
+<strong>Restoring a deleted Active Directory object using Ldp.exe</strong>
+
+You can use Ldp.exe to restore a single, deleted Active Directory object.
+
+Open Ldp.exe.
+
+To connect and bind to the server that hosts the forest root domain of your AD DS environment, under Connections, click Connect, and then click Bind.
+
+In the console tree, navigate to the CN=Deleted Objects container.
+
+Locate and right-click the deleted Active Directory object that you want to restore, and then click Modify.
+
+In the Modify dialog box:
+In Edit Entry Attribute, type isDeleted.
+
+Leave the Values box empty.
+
+Under Operation, click Delete, and then click Enter.
+
+In Edit Entry Attribute, type distinguishedName.
+
+In Values, type the original distinguished name (also known as DN) of this Active Directory object.
+
+Under Operation, click Replace.
+
+Make sure that the Extended check box is selected, click Enter, and then click Run.
+--------------------------------------------------------------------------------
+Install Perl modules
+Thu, 24 Jan 2013 16:03:30 +0000
+as root:
+
+perl -MCPAN -e shell
+--------------------------------------------------------------------------------
+Command line wildcards
+Thu, 24 Jan 2013 16:04:37 +0000
+`*' will matches with any string of characters. For example, rm *.c would delete all files in the current directory whose names end with `.c'.
+
+`?' will match any single character. For example, rm x?b.c would delete all files whose names consisted of five characters, the first of which was `x' and the last three of which were `b.c'. Example: rm prog?.c will delete
+all the files (in the current directory) The files x3b.c and xrb.c would be deleted, while the file xuvb.c would not.
+
+[0-9] matches character from `0' through `9'
+
+[a-z] matches character from `a' through `z'
+
+For instance, rm test[1-3].c would remove test1.c, test2.c and test3.c but not test4.c.
+
+! : anything but what follows
+
+| : pipe - send the output of one command to another program, eg. less, grep. eg.
+
+cat &lt;longfile&gt; | less or rpm -qa | grep qt
+
+&gt; : you can send the output of a file to another file, eg cat xxx &gt; xxx.txt
+
+&gt;&gt; : appends the output, otherwise an existing file will get overwritten eg. cat xxyy &gt;&gt; xxx.txt
+
+&amp; : runs a job in the background
+
+.. refers to the parent directory of where you are. Can be used with
+other stuff, like cd.
+
+. refers to current directory.
+
+./runme : to run an executable in the current directory because it's not in the path.
+
+`&lt;cmd&gt; &lt;option&gt; ` the back-ticks are used to embed a command that must be executed
+--------------------------------------------------------------------------------
+Activate Apple Remote Desktop using SSH
+Thu, 24 Jan 2013 16:05:10 +0000
+/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users admin -privs -all -restart -agent -menu
+--------------------------------------------------------------------------------
+suid set user id
+Thu, 24 Jan 2013 16:06:00 +0000
+chmod 4777 : (4 = u+s) : Adding the set user id or suid bit. When you run the file, you become the user/owner : rwsrwxrwx
+--------------------------------------------------------------------------------
+Restore deleted Active Directory object
+Thu, 28 Mar 2013 11:02:39 +0000
+- Open Ldp.exe from an elevated command prompt. Open a command prompt (Cmd.exe) as an administrator. To open a command prompt as an administrator, click Start. In Start Search, type Command Prompt. At the top of the Start menu, right-click Command Prompt, and then click Run as administrator. If the User Account Control dialog box appears, enter the appropriate credentials (if requested), confirm that the action it displays is what you want, and then click Continue.
+
+- To connect and bind to the server that hosts the forest root domain of your AD DS environment, under Connections, click Connect, and then click Bind.
+
+- On the Options menu, click Controls.
+
+- In the Controls dialog box, expand the Load Predefined drop-down list, click Return Deleted Objects, and then click OK.
+
+- In the console tree, navigate to the CN=Deleted Objects container.
+
+- Locate and right-click the deleted Active Directory object that you want to restore, and then click Modify.
+
+- In the Modify dialog box:
+<p style=""padding-left: 30px;"">In Edit Entry Attribute, type 'isDeleted'.
+Leave the Values box empty.
+Under Operation, click Delete, and then click Enter.
+In Edit Entry Attribute, type 'distinguishedName'.
+In Values, type the original distinguished name (also known as DN) of this Active Directory object.
+Under Operation, click Replace.
+Make sure that the Extended check box is selected, click Enter, and then click Run.</p>
+--------------------------------------------------------------------------------
+OS X Yosemite wrong display resolution (NEC?)
+Thu, 29 Jan 2015 13:13:31 +0000
+1024x768 not in list on NEC.
+
+replace content of:
+
+/System/Library/Displays/Overrides/DisplayVendorID-756e6b6e/DisplayProductID-717<
+with:
+
+&lt;?xml version=""1.0"" encoding=""UTF-8""?&gt;
+&lt;!DOCTYPE plist PUBLIC ""-//Apple//DTD PLIST 1.0//EN"" ""http://www.apple.com/DTDs/PropertyList-1.0.dtd""&gt;
+&lt;plist version=""1.0""&gt;
+&lt;array&gt;
+&lt;dict&gt;
+&lt;key&gt;IODisplayOverrideMatching&lt;/key&gt;
+&lt;dict&gt;
+&lt;key&gt;IODisplayIsDigital&lt;/key&gt;
+&lt;false/&gt;
+&lt;/dict&gt;
+&lt;key&gt;default-resolution&lt;/key&gt;
+&lt;data&gt;AAAEAAAAAwAAAAAB&lt;/data&gt;
+&lt;key&gt;tovr&lt;/key&gt;
+&lt;dict&gt;
+&lt;key&gt;262&lt;/key&gt;
+&lt;data&gt;AAAAAAAAAAAAAAAAAAAABw==&lt;/data&gt;
+&lt;key&gt;268&lt;/key&gt;
+&lt;data&gt;AAAAAAAAAAAAAAAAAAAABw==&lt;/data&gt;
+&lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/array&gt;
+&lt;/plist&gt;<
+Show used Display files:
+
+ioreg -lw0 | grep IODisplayPrefsKey<
+
+--------------------------------------------------------------------------------
+ESXi custom drivers on Intel NUC
+Thu, 29 Jan 2015 13:16:10 +0000
+net-e1000e
+sata-xahci
+esxcli-shell
+
+esxcli software vib install -d http://vibsdepot.v-front.de -n net-e1000e<
+
+esxcli software vib install -d http://vibsdepot.v-front.de -n sata-xahci<
+
+esxcli software vib install -d http://vibsdepot.v-front.de -n esxcli-shell<
+
+--------------------------------------------------------------------------------
+Linux Users Ubuntu
+Thu, 29 Jan 2015 13:26:49 +0000
+Show users logged in:
+
+w<
+List all user:
+
+cut -d: -f1 /etc/passwd<
+Add new user:
+
+useradd &lt;username&gt;<
+Add a new user with home directory (-m):
+
+useradd -m &lt;username&gt;<
+Create a password for the user:
+
+passwd &lt;username&gt;<
+Add user to group:
+
+usermod -a -G &lt;group&gt; &lt;username&gt;<
+Add the user to the sudo group:
+
+usermod -a -G &lt;username&gt;<
+Delete user:
+
+userdel &lt;username&gt;<
+Delete home folder:
+
+rm -r /home/&lt;username&gt;<
+Change username:
+
+usermod -l &lt;new_username&gt; &lt;old_username&gt;<
+Change shell for user:
+
+chsh &lt;username&gt;<
+Change the default shell of the user to bash:
+
+chsh -s /bin/bash &lt;username&gt;<
+Change details for user:
+
+chfn &lt;username&gt;<
+Change user home:
+
+usermod -d &lt;new home&gt; &lt;user&gt;<
+
+--------------------------------------------------------------------------------
+NFS Automount OS X
+Thu, 29 Jan 2015 13:32:27 +0000
+edit:
+
+/etc/autofs.conf<
+change line:
+
+AUTOMOUNTD_MNTOPTS=nosuid,nodev<
+to:
+
+AUTOMOUNTD_MNTOPTS=nosuid,nodev,resvport<
+edit:
+
+/etc/auto_master<
+add:
+
+#
+/nas            auto_nas<
+create:
+
+/etc/auto_nas<
+add:
+
+data    192.168.1.2:/nfspath<
+
+
+mount_nfs -o resvport  192.168.1.2:/nfspath<
+
+--------------------------------------------------------------------------------
+Ubuntu install kernel header files
+Tue, 03 Feb 2015 10:03:57 +0000
+
+apt-get install linux-headers-$(uname -r)<
+
+--------------------------------------------------------------------------------
+Fortigate debug ipsec vpn
+Tue, 04 Apr 2017 10:18:27 +0000
+
+diagnose debug disable<
+
+diagnose debug reset<
+
+diagnose vpn ike gateway clear<
+
+diagnose vpn tunnel list<
+
+diagnose vpn ike log filter name &lt;tunnelname&gt;<
+
+diagnose debug application ike &lt;-1/63&gt;<
+
+diagnose debug enable<
+
+execute vpn ipsec tunnel up &lt;phase2name&gt;
+--------------------------------------------------------------------------------
+PowerCLI to vCenter5 or ESX host
+Tue, 04 Jun 2013 11:34:29 +0000
+Connect to vCenter/ESX:
+
+Connect-VIServer &lt;servername&gt; -WarningAction SilentlyContinue<
+List virtual machines that need disks consolidation:
+
+Get-VM | Where-Object {$_.Extensiondata.Runtime.ConsolidationNeeded}<
+Consolidate a virtual machine’s disks:
+
+(Get-VM -Name ""&lt;vmname&gt;"").ExtensionData.ConsolidateVMDisks()
+--------------------------------------------------------------------------------
+OS X Remove Application from Dock
+Tue, 07 May 2013 13:57:51 +0000
+Show Package Contents on Application (If available).
+
+Open ./Contents/Info.plist
+
+Put the following two lines  after &lt;dict&gt; on line 6:
+
+&lt;key&gt;LSUIElement&lt;/key&gt;
+&lt;string&gt;1&lt;/string&gt;
+--------------------------------------------------------------------------------
+Linux resize partition
+Tue, 09 Jun 2015 10:21:05 +0000
+Create snapshot if possible.
+
+Open fdisk with disk:
+
+fdisk /dev/sda<
+- use p to list the partition info
+
+Example:
+Disk /dev/sda: 42.9 GB, 42949672960 bytes
+255 heads, 63 sectors/track, 5221 cylinders, total 83886080 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x000c67c5Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048    75497471    37747712   83  Linux
+/dev/sda2        75499518    83884031     4192257    5  Extended
+/dev/sda5        75499520    83884031     4192256   82  Linux swap / Solaris<
+- use d to delete the partition (in example partition 1)
+
+- use n to create the new partition (in example primary partition 1 with the same first sector 2048)
+
+- use p to check everything looks OK
+
+- use w to write partition table
+
+
+
+Check filesystem:
+
+e2fsck -f /dev/sda1<
+Resize filesystem:
+
+resize2fs /dev/sda1<
+Reboot the system
+--------------------------------------------------------------------------------
+NTP Server
+Tue, 10 Dec 2013 09:17:26 +0000
+
+nl.pool.ntp.org<
+
+213.206.85.19
+
+85.17.249.173
+
+217.77.132.1
+
+87.195.109.207
+--------------------------------------------------------------------------------
+Linux run cmd in background and keep running on logout
+Tue, 11 Aug 2015 08:18:36 +0000
+
+nohup /script.sh arg1 arg2 &amp;
+--------------------------------------------------------------------------------
+Secure default MySQL installation
+Tue, 12 Feb 2013 10:56:55 +0000
+
+mysql_secure_installation
+--------------------------------------------------------------------------------
+ESXi 5.1> Disk Smart status
+Tue, 13 May 2014 11:51:52 +0000
+HP Raid:
+
+/opt/hp/hpssacli/bin/hpssacli ctrl slot=0 show status<
+
+/opt/hp/hpssacli/bin/hpssacli ctrl slot=0 pd all show status<
+Normal disk:
+
+esxcli storage core device list |grep 'Display Name'<
+
+esxcli storage core device smart get -d &lt;disk&gt;
+--------------------------------------------------------------------------------
+Windows error cannot delete folder when the name ends with a dot.
+Tue, 17 Mar 2015 08:31:48 +0000
+
+rd /s /q ""\\?\c:\folder.""
+--------------------------------------------------------------------------------
+Windows error: Item is no longer located in ...
+Tue, 17 Mar 2015 09:29:33 +0000
+
+dir /x/a<
+
+rd &lt;item_shortname&gt; /s
+--------------------------------------------------------------------------------
+Connect to Office 365 PowerShell
+Tue, 18 Mar 2014 11:07:56 +0000
+Only first time:
+
+Set-ExecutionPolicy RemoteSigned<
+Connect:
+
+$TenantCredentials = Get-Credential<
+
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $TenantCredentials -Authentication Basic -AllowRedirection<
+
+Import-PSSession $Session<
+Disconnect:
+
+Remove-PSSession $Session
+--------------------------------------------------------------------------------
+Active Directory LDAP Syntax Filter examples
+Tue, 19 May 2015 08:47:35 +0000
+<table border=""1"" width=""100%"">
+All user objects</td>
+<td>(&amp;(objectCategory=person)(objectClass=user))</td>
+</tr>
+<tr>
+<td>All user objects</td>
+<td>(sAMAccountType=805306368)</td>
+</tr>
+<tr>
+<td>All computer objects</td>
+<td>(objectCategory=computer)</td>
+</tr>
+<tr>
+<td>All contact objects</td>
+<td>(objectClass=contact)</td>
+</tr>
+<tr>
+<td>All group objects</td>
+<td>(objectCategory=group)</td>
+</tr>
+<tr>
+<td>All organizational unit objects</td>
+<td>(objectCategory=organizationalUnit)</td>
+</tr>
+<tr>
+<td>All container objects</td>
+<td>(objectCategory=container)</td>
+</tr>
+<tr>
+<td>All builtin container objects</td>
+<td>(objectCategory=builtinDomain)</td>
+</tr>
+<tr>
+<td>All domain objects</td>
+<td>(objectCategory=domain)</td>
+</tr>
+<tr>
+<td>Computer objects with no description</td>
+<td>(&amp;(objectCategory=computer)(!(description=*)))</td>
+</tr>
+<tr>
+<td>Group objects with a description</td>
+<td>(&amp;(objectCategory=group)(description=*))</td>
+</tr>
+<tr>
+<td>Users with cn starting with ""Joe""</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(cn=Joe*))</td>
+</tr>
+<tr>
+<td>Object with description ""East\West Sales""</td>
+<td>(description=East\5CWest Sales)</td>
+</tr>
+<tr>
+<td>Phone numbers in form (xxx) xxx-xxx</td>
+<td>(telephoneNumber=(*)*-*)</td>
+</tr>
+<tr>
+<td>Groups with cn starting with
+""Test"" or ""Admin""</td>
+<td>(&amp;(objectCategory=group)
+(|(cn=Test*)(cn=Admin*)))</td>
+</tr>
+<tr>
+<td>All users with both a first and last name.</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(givenName=*)(sn=*))</td>
+</tr>
+<tr>
+<td>All users with direct reports but no
+manager</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(directReports=*)(!(manager=*)))</td>
+</tr>
+<tr>
+<td>All users with specified email address</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(|(proxyAddresses=*:jsmith@company.com)
+(mail=jsmith@company.com)))</td>
+</tr>
+<tr>
+<td>Object with Common Name ""Jim * Smith""</td>
+<td>(cn=Jim \2A Smith)</td>
+</tr>
+<tr>
+<td>Objects with sAMAccountName that begins
+with ""x"", ""y"", or ""z""</td>
+<td>(sAMAccountName&gt;=x)</td>
+</tr>
+<tr>
+<td>Objects with sAMAccountName that begins
+
+with ""a"" or any number or symbol except ""$""</td>
+<td>(&amp;(sAMAccountName&lt;=a)(!(sAMAccountName=$*)))</td>
+</tr>
+<tr>
+<td>All users with ""Password Never Expires"" set</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(userAccountControl:1.2.840.113556.1.4.803:=65536))</td>
+</tr>
+<tr>
+<td>All disabled user objects</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(userAccountControl:1.2.840.113556.1.4.803:=2))</td>
+</tr>
+<tr>
+<td>All enabled user objects</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(!(userAccountControl:1.2.840.113556.1.4.803:=2)))</td>
+</tr>
+<tr>
+<td>All users not required to have a password</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(userAccountControl:1.2.840.113556.1.4.803:=32))</td>
+</tr>
+<tr>
+<td>All users with ""Do not require kerberos
+preauthentication"" enabled</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(userAccountControl:1.2.840.113556.1.4.803:=4194304))</td>
+</tr>
+<tr>
+<td>Users with accounts that do not expire</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(|(accountExpires=0)
+(accountExpires=9223372036854775807)))</td>
+</tr>
+<tr>
+<td>Users with accounts that do expire</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(accountExpires&gt;=1)
+(accountExpires&lt;=9223372036854775806))</td>
+</tr>
+<tr>
+<td>Accounts trusted for delegation
+(unconstrained delegation)</td>
+<td>(userAccountControl:1.2.840.113556.1.4.803:=524288)</td>
+</tr>
+<tr>
+<td>Accounts that are sensitive and not trusted
+for delegation</td>
+<td>(userAccountControl:1.2.840.113556.1.4.803:=1048574)</td>
+</tr>
+<tr>
+<td>All distribution groups</td>
+<td>(&amp;(objectCategory=group)
+(!(groupType:1.2.840.113556.1.4.803:=2147483648)))</td>
+</tr>
+<tr>
+<td>All security groups</td>
+<td>(groupType:1.2.840.113556.1.4.803:=2147483648)</td>
+</tr>
+<tr>
+<td>All built-in groups</td>
+<td>(groupType:1.2.840.113556.1.4.803:=1)</td>
+</tr>
+<tr>
+<td>All global groups</td>
+<td>(groupType:1.2.840.113556.1.4.803:=2)</td>
+</tr>
+<tr>
+<td>All domain local groups</td>
+<td>(groupType:1.2.840.113556.1.4.803:=4)</td>
+</tr>
+<tr>
+<td>All universal groups</td>
+<td>(groupType:1.2.840.113556.1.4.803:=8)</td>
+</tr>
+<tr>
+<td>All global security groups</td>
+<td>(groupType=-2147483646)</td>
+</tr>
+<tr>
+<td>All universal security groups</td>
+<td>(groupType=-2147483640)</td>
+</tr>
+<tr>
+<td>All domain local security groups</td>
+<td>(groupType=-2147483644)</td>
+</tr>
+<tr>
+<td>All global distribution groups</td>
+<td>(groupType=2)</td>
+</tr>
+<tr>
+<td>All objects with service principal name</td>
+<td>(servicePrincipalName=*)</td>
+</tr>
+<tr>
+<td>Users with ""Allow Access"" on ""Dial-in"" tab of ADUC</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(msNPAllowDialin=TRUE))</td>
+</tr>
+<tr>
+<td>Users with ""Control access though
+NPS Network Policy"" on ""Dial-in"" tab of ADUC</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(!(msNPAllowDialin=*)))</td>
+</tr>
+<tr>
+<td>All groups created after March 1, 2011</td>
+<td>(&amp;(objectCategory=group)
+(whenCreated&gt;=20110301000000.0Z))</td>
+</tr>
+<tr>
+<td>All users that must change their password at next logon</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(pwdLastSet=0))</td>
+</tr>
+<tr>
+<td>All users that changed their password since
+April 15, 2011 (CST)</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(pwdLastSet&gt;=129473172000000000))</td>
+</tr>
+<tr>
+<td>All users with ""primary"" group
+other than ""Domain Users""</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(!(primaryGroupID=513)))</td>
+</tr>
+<tr>
+<td>All computers with ""primary"" group
+""Domain Computers""</td>
+<td>(&amp;(objectCategory=computer)
+(primaryGroupID=515))</td>
+</tr>
+<tr>
+<td>Object with GUID
+""90395F191AB51B4A9E9686C66CB18D11""</td>
+<td>(objectGUID=\90\39\5F\19\1A\B5\1B\4A\9E\96
+\86\C6\6C\B1\8D\11)</td>
+</tr>
+<tr>
+<td>Object beginning with GUID
+""90395F191AB51B4A""</td>
+<td>(objectGUID=\90\39\5F\19\1A\B5\1B\4A*)</td>
+</tr>
+<tr>
+<td>Object with SID ""S-1-5-21-73586283
+-152049171-839522115-1111""</td>
+<td>(objectSID=S-1-5-21-73586283-152049171
+-839522115-1111)</td>
+</tr>
+<tr>
+<td>Object with SID ""010500000000000515000
+0006BD662041316100943170A3257040000""</td>
+<td>(objectSID=15000005\15
+000\6B\D6\624\13\16\109\43\17A\32
+\57400)</td>
+</tr>
+<tr>
+<td>All computers that are not Domain Controllers</td>
+<td>(&amp;(objectCategory=computer)
+(!(userAccountControl:1.2.840.113556.1.4.803:=8192)))</td>
+</tr>
+<tr>
+<td>All Domain Controllers</td>
+<td>(&amp;(objectCategory=computer)
+(userAccountControl:1.2.840.113556.1.4.803:=8192))</td>
+</tr>
+<tr>
+<td>All Domain Controllers</td>
+<td>(primaryGroupID=516)</td>
+</tr>
+<tr>
+<td>All servers</td>
+<td>(&amp;(objectCategory=computer)
+(operatingSystem=*server*))</td>
+</tr>
+<tr>
+<td>All member servers (not DC's)</td>
+<td>(&amp;(objectCategory=computer)
+(operatingSystem=*server*)
+(!(userAccountControl:1.2.840.113556.1.4.803:=8192)))</td>
+</tr>
+<tr>
+<td>All direct members of specified group</td>
+<td>(memberOf=cn=Test,ou=East,dc=Domain,dc=com)</td>
+</tr>
+<tr>
+<td>All users not direct members of a specified group</td>
+<td>(&amp;(objectCategory=person)(objectClass=user)
+(!(memberOf=cn=Test,ou=East,dc=Domain,dc=com)))</td>
+</tr>
+<tr>
+<td>All groups with specified direct member</td>
+<td>(member=cn=Jim Smith,ou=West,
+dc=Domain,dc=com)</td>
+</tr>
+<tr>
+<td>All members of specified group, including due to group nesting</td>
+<td>(memberOf:1.2.840.113556.1.4.1941:=
+cn=Test,ou=East,dc=Domain,dc=com)</td>
+</tr>
+<tr>
+<td>All groups specified user belongs to,
+including due to group nesting</td>
+<td>(member:1.2.840.113556.1.4.1941:=
+cn=Jim Smith,ou=West,dc=Domain,dc=com)</td>
+</tr>
+<tr>
+<td>Objects with givenName ""Jim*"" and sn
+""Smith*"", or with cn ""Jim Smith*""</td>
+<td>(anr=Jim Smith)</td>
+</tr>
+<tr>
+<td>All attributes in the Schema container replicated to the GC</td>
+<td>(&amp;(objectCategory=attributeSchema)
+(isMemberOfPartialAttributeSet=TRUE))</td>
+</tr>
+<tr>
+<td>All operational (constructed) attributes in the Schema container</td>
+<td>(&amp;(objectCategory=attributeSchema)
+(systemFlags:1.2.840.113556.1.4.803:=4))</td>
+</tr>
+<tr>
+<td>All attributes in the Schema container not
+replicated to other Domain Controllers</td>
+<td>(&amp;(objectCategory=attributeSchema)
+(systemFlags:1.2.840.113556.1.4.803:=1))</td>
+</tr>
+<tr>
+<td>All objects where deletion is not allowed</td>
+<td>(systemFlags:1.2.840.113556.1.4.803:=2147483648)</td>
+</tr>
+<tr>
+<td>Attributes whose values are copied when the object is copied</td>
+<td>(searchFlags:1.2.840.113556.1.4.803:=16)</td>
+</tr>
+<tr>
+<td>Attributes preserved in tombstone object when object deleted</td>
+<td>(searchFlags:1.2.840.113556.1.4.803:=8)</td>
+</tr>
+<tr>
+<td>Attributes in the Ambiguous Name Resolution (ANR) set</td>
+<td>(searchFlags:1.2.840.113556.1.4.803:=4)</td>
+</tr>
+<tr>
+<td>Attributes in the Schema that are indexed</td>
+<td>(searchFlags:1.2.840.113556.1.4.803:=1)</td>
+</tr>
+<tr>
+<td>Attributes marked confidential in the schema</td>
+<td>(searchFlags:1.2.840.113556.1.4.803:=128)</td>
+</tr>
+<tr>
+<td>Attributes in the RODC filtered attribute set, or FAS</td>
+<td>(searchFlags:1.2.840.113556.1.4.803:=512)</td>
+</tr>
+<tr>
+<td>All site links in the Configuration container</td>
+<td>(objectClass=siteLink)</td>
+</tr>
+<tr>
+<td>The nTDSDSA objects associated with
+all Global Catalogs. This will identify all DC's
+that are GC's.</td>
+<td>(&amp;(objectCategory=nTDSDSA)
+(options:1.2.840.113556.1.4.803:=1))</td>
+</tr>
+<tr>
+<td>The nTDSDSA object associated with the
+PDC Emulator. This will identify the DC
+with the PDC Emulator FSMO role.</td>
+<td>(&amp;(objectClass=domainDNS)(fSMORoleOwner=*))</td>
+</tr>
+<tr>
+<td>The nTDSDSA object associated with the
+RID Master. This will identify the DC
+with the RID Master FSMO role.</td>
+<td>(&amp;(objectClass=rIDManager)(fSMORoleOwner=*))</td>
+</tr>
+<tr>
+<td>The nTDSDSA object associated with the
+Infrastructure Master. This will identify the DC
+with this FSMO role.</td>
+<td>(&amp;(objectClass=infrastructureUpdate)
+(fSMORoleOwner=*))</td>
+</tr>
+<tr>
+<td>The nTDSDSA object associated with the
+Schema Master. This will identify the DC with
+the Schema Master FSMO role.</td>
+<td>(&amp;(objectClass=dMD)(fSMORoleOwner=*))</td>
+</tr>
+<tr>
+<td>The nTDSDSA object associated with the
+Domain Naming Master. This will identify the
+DC with this FSMO role.</td>
+<td>(&amp;(objectClass=crossRefContainer)
+(fSMORoleOwner=*))</td>
+</tr>
+<tr>
+<td>All Exchange servers in the Configuration container</td>
+<td>(objectCategory=msExchExchangeServer)</td>
+</tr>
+<tr>
+<td>All objects protected by AdminSDHolder</td>
+<td>(adminCount=1)</td>
+</tr>
+<tr>
+<td>All trusts established with a domain</td>
+<td>(objectClass=trustedDomain)</td>
+</tr>
+<tr>
+<td>All Group Policy objects</td>
+<td>(objectCategory=groupPolicyContainer)</td>
+</tr>
+<tr>
+<td>All service connection point objects</td>
+<td>(objectClass=serviceConnectionPoint)</td>
+</tr>
+<tr>
+<td>All Read-Only Domain Controllers</td>
+<td>(userAccountControl:1.2.840.113556.1.4.803:=67108864)<
+
+--------------------------------------------------------------------------------
+Network tools IPv4 and IPv6
+Tue, 21 Apr 2015 13:55:14 +0000
+<strong>Apple OS X</strong>
+<table border=""1"" cellspacing=""0"" cellpadding=""5"">
+Ping for IPv4</td>
+<td><tt>/sbin/ping</tt></td>
+</tr>
+<tr>
+<td>Ping for IPv6</td>
+<td><tt>/sbin/ping6</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv4</td>
+<td><tt>/usr/sbin/traceroute</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv6</td>
+<td><tt>/usr/sbin/traceroute6</tt></td>
+</tr>
+<tr>
+<td>Interface Info</td>
+<td><tt>/sbin/ifconfig</tt></td>
+</tr>
+<tr>
+<td>IPv4 Route table</td>
+<td><tt>/usr/sbin/netstat -f inet -rn</tt></td>
+</tr>
+<tr>
+<td>IPv6 Route table</td>
+<td><tt>/usr/sbin/netstat -f inet6 -rn</tt></td>
+</tr>
+<tr>
+<td>IPv4 arp table</td>
+<td><tt>/usr/sbin/arp -an</tt></td>
+</tr>
+<tr>
+<td>IPv6 ndp table</td>
+<td><tt>/usr/sbin/ndp -an</tt><
+
+
+<strong>Windows Vista -&gt;</strong>
+<table border=""1"" cellspacing=""0"" cellpadding=""5"">
+Ping for IPv4</td>
+<td><tt>ping -4</tt></td>
+</tr>
+<tr>
+<td>Ping for IPv6</td>
+<td><tt>ping -6</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv4</td>
+<td><tt>tracert -4</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv6</td>
+<td><tt>tracert -6</tt></td>
+</tr>
+<tr>
+<td>Interface Info</td>
+<td><tt>ipconfig /all</tt></td>
+</tr>
+<tr>
+<td>IPv4 Route table</td>
+<td><tt>netsh interface ipv4 show route</tt></td>
+</tr>
+<tr>
+<td>IPv6 Route table</td>
+<td><tt>netsh interface ipv6 show route</tt></td>
+</tr>
+<tr>
+<td>IPv4 arp table</td>
+<td><tt>arp -a</tt></td>
+</tr>
+<tr>
+<td>IPv6 ndp table</td>
+<td><tt>netsh interface ipv6 show neighbors</tt><
+
+
+<strong>Linux</strong>
+<table border=""1"" cellspacing=""0"" cellpadding=""5"">
+Ping for IPv4</td>
+<td><tt>ping</tt></td>
+</tr>
+<tr>
+<td>Ping for IPv6</td>
+<td><tt>ping6</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv4</td>
+<td><tt>traceroute -4</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv6</td>
+<td><tt>traceroute -6</tt></td>
+</tr>
+<tr>
+<td>Interface Info</td>
+<td><tt>ip address show</tt></td>
+</tr>
+<tr>
+<td>IPv4 Route table</td>
+<td><tt>netstat -A inet -rn</tt></td>
+</tr>
+<tr>
+<td>IPv6 Route table</td>
+<td><tt>netstat -A inet6 -rn</tt></td>
+</tr>
+<tr>
+<td>IPv4 arp table</td>
+<td><tt>arp -an</tt></td>
+</tr>
+<tr>
+<td>IPv6 ndp table</td>
+<td><tt>ip -6 neighbor show</tt><
+
+
+<strong>Solaris</strong>
+<table border=""1"" cellspacing=""0"" cellpadding=""5"">
+Ping for IPv4</td>
+<td><tt>/usr/sbin/ping -A inet</tt></td>
+</tr>
+<tr>
+<td>Ping for IPv6</td>
+<td><tt>/usr/sbin/ping -A inet6</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv4</td>
+<td><tt>/usr/sbin/traceroute -A inet</tt></td>
+</tr>
+<tr>
+<td>Traceroute for IPv6</td>
+<td><tt>/usr/sbin/traceroute -A inet6</tt></td>
+</tr>
+<tr>
+<td>Interface Info</td>
+<td><tt>/bin/netstat -ain</tt></td>
+</tr>
+<tr>
+<td>IPv4 Route table</td>
+<td><tt>/bin/netstat -f inet -rn</tt></td>
+</tr>
+<tr>
+<td>IPv6 Route table</td>
+<td><tt>/bin/netstat -f inet6 -rn</tt></td>
+</tr>
+<tr>
+<td>IPv4 arp table</td>
+<td><tt>/bin/netstat -pn -f inet</tt></td>
+</tr>
+<tr>
+<td>IPv6 ndp table</td>
+<td><tt>/bin/netstat -pn -f inet6</tt>
+--------------------------------------------------------------------------------
+Create OS X USB installer
+Tue, 21 Oct 2014 08:03:51 +0000
+sudo /Applications/Install\ OS\ X\ El\ Capitan.app/Contents/Resources/createinstallmedia --volume /Volumes/USB --applicationpath /Applications/Install\ OS\ X\ El\ Capitan.app --nointeraction
+
+sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/USB --applicationpath /Applications/Install\ macOS\ Sierra.app --nointeraction
+
+sudo /Applications/Install\ macOS\ High\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/USB --applicationpath /Applications/Install\ macOS\ High\ Sierra.app --nointeraction
+--------------------------------------------------------------------------------
+Ubuntu add locale
+Tue, 22 Apr 2014 14:39:43 +0000
+
+locale-gen nl_NL
+locale-gen nl_NL.UTF8<
+
+update-locale<
+
+--------------------------------------------------------------------------------
+ESX 4 and 5 restart CIM service (Hardware health monitor)
+Tue, 23 Apr 2013 11:38:08 +0000
+
+/etc/init.d/sfcbd-watchdog restart
+--------------------------------------------------------------------------------
+OS X CLI vi syntax highlighting support (colors)
+Tue, 25 Oct 2016 07:20:34 +0000
+Insert file .vimrc in the root of the home folder with the following content:
+
+filetype plugin indent on
+syntax on
+--------------------------------------------------------------------------------
+OS X terminal colors
+Tue, 25 Oct 2016 07:23:53 +0000
+Add the following line to .bash_profile :
+
+export CLICOLOR=1
+--------------------------------------------------------------------------------
+What is my public IP address
+Tue, 26 Jul 2016 08:07:11 +0000
+
+echo ""Your public IP address is: $(curl -s https://api.ipify.org)""
+--------------------------------------------------------------------------------
+Convert Photos using Imagemagick
+Tue, 29 Jan 2013 05:57:35 +0000
+
+find -name *.jpg -exec convert {} -resize 2048x2048\&gt; {} \;
+--------------------------------------------------------------------------------
+OS X CLI Clipboard
+Tue, 29 Mar 2016 10:32:17 +0000
+output to clipboard:
+
+ls -ls | pbcopy<
+input from clipboard:
+
+pbpaste &gt; test.txt
+--------------------------------------------------------------------------------
+vim disable visual-mode (global)
+Tue, 30 Jun 2020 12:59:27 +0000
+Edit:
+/usr/share/vim/vimrc
+uncomment: let g:skip_defaults_vim = 1
+--------------------------------------------------------------------------------
+CentOS: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+Wed, 02 Sep 2015 09:52:25 +0000
+add following to /etc/environment:
+
+LANG=en_US.utf8
+LC_CTYPE=en_US.utf8
+--------------------------------------------------------------------------------
+snmpwalk
+Wed, 03 Aug 2016 12:38:38 +0000
+
+snmpwalk -v2c -c public &lt;ip&gt;<
+
+--------------------------------------------------------------------------------
+VMware Fusion vmdk to ESXi vmdk
+Wed, 03 Dec 2014 08:37:19 +0000
+Convert VMware Fusion vmdk to ESXi wmdk
+
+/Applications/VMware\ Fusion.app/Contents/Library/vmware-vdiskmanager -r vmwarefusion.vmdk -t 4 esxi.vmdk
+--------------------------------------------------------------------------------
+Spamassassin learning statistics
+Wed, 05 Jun 2013 12:50:06 +0000
+
+sa-learn --dump magic
+--------------------------------------------------------------------------------
+Create Intel NUC ESXi 6 image (ESXi-Customizer)
+Wed, 07 Oct 2015 08:26:04 +0000
+Open VMware vSphere PowerCLI.
+
+Create offline zip bundle:
+
+.\ESXi-Customizer-PS.ps1 -izip &lt;VMWare bundle&gt; -ozip -vft -load sata-xahci<
+Create iso:
+
+.\ESXi-Customizer-PS.ps1 -izip &lt;VMWare bundle&gt; -vft -load sata-xahci<
+<a href=""http://www.v-front.de/p/esxi-customizer-ps.html"" target=""_blank"" rel=""noopener noreferrer"">ESXi-Customizer download</a>
+--------------------------------------------------------------------------------
+MariaDB authentication
+Wed, 13 Sep 2017 13:33:18 +0000
+Disable plugin auth for user root:
+
+use mysql;
+update user set plugin='' where User='root';
+flush privileges;
+
+--------------------------------------------------------------------------------
+Juniper SRX CLI editing key sequences
+Wed, 14 May 2014 13:09:08 +0000
+Ctrl+b: Moves the cursor left one character
+Ctrl+a: Moves the cursor to the beginning of the command line
+Ctrl+f: Moves the cursor right one character
+Ctrl+e: Moves the cursor to the end of the command line
+Delete and Backspace: Deletes the character before the cursor
+Ctrl+d: Deletes the character over the cursor
+Ctrl+k: Deletes from the cursor to the end of the line
+Ctrl+u: Deletes all characters and negates the current command
+Ctrl+w: Deletes the entire word to the left of the cursor
+Ctrl+l: Redraws the current line
+Ctrl+p, Ctrl+n: Repeats the previous and next command in the command history, respectively
+Esc+d: Deletes the word to the right
+Esc+b: Moves the cursor back one word with no delete
+Esc+f: Moves the cursor forward one word with no delete
+--------------------------------------------------------------------------------
+vCenter Appliance update
+Wed, 18 Mar 2020 19:53:42 +0000
+<!-- wp:tadv/classic-paragraph -->
+<p>Update using mounted path iso</p>
+<p>Stage the iso:</p>
+<p><tt>software-packages stage --iso</tt></p>
+<p>Install:</p>
+<p><tt>software-packages install --staged</tt></p>
+<!-- /wp:tadv/classic-paragraph -->
+--------------------------------------------------------------------------------
+Run multiple commands
+Wed, 19 Aug 2015 06:54:55 +0000
+cmd1; cmd2 = Run cmd1 and then cmd2, regardless of success of cmd1
+cmd1 &amp;&amp; cmd2 = Run cmd2 if cmd1 succeeded
+cmd1 || cmd2 = Run cmd2 if cmd1 failed
+--------------------------------------------------------------------------------
+Find files/folders and change permissions
+Wed, 19 Oct 2016 21:17:07 +0000
+Find files:
+
+find ./ -type f -exec chmod u=rw,g=r,o= '{}' \;<
+Find folders:
+
+find ./ -type d -exec chmod u=rwx,g=rx,o= '{}' \;<
+
+--------------------------------------------------------------------------------
+Smartphone APN & MMS Servers
+Wed, 23 Jan 2013 13:01:28 +0000
+<strong>KPN APN</strong>
+APN : portalmmm.nl
+Username :
+Password :
+
+<strong>KPN MMS</strong>
+APN : portalmmm.nl
+Username : kpn
+Password : kpn
+MMSC : <a href=""http://mp.mobiel.kpn/mmsc"">http://mp.mobiel.kpn/mmsc</a>
+MMS proxy : 10.10.100.20:5080
+MMS size :
+MMS UA :
+
+<strong>Vodafone particulier / zakelijk APN</strong>
+APN : live.vodafone.com / office.vodafone.nl
+Username : vodafone
+Password : vodafone
+
+<strong>Vodafone particulier / zakelijk MMS</strong>
+APN : live.vodafone.com / office.vodafone.nl
+Username : vodafone
+Password : vodafone
+MMSC : <a href=""http://mmsc.mms.vodafone.nl"">http://mmsc.mms.vodafone.nl</a>
+MMS proxy : 192.168.251.150:8799
+MMS size : 300000
+MMS UA :
+--------------------------------------------------------------------------------
+NTP
+Wed, 23 Jan 2013 13:03:14 +0000
+0.europe.pool.ntp.org
+1.europe.pool.ntp.org
+2.europe.pool.ntp.org
+3.europe.pool.ntp.org
+
+0.nl.pool.ntp.org
+1.nl.pool.ntp.org
+2.nl.pool.ntp.org
+3.nl.pool.ntp.org
+--------------------------------------------------------------------------------
+Photoshop Rounded Corners with the Selection Tool
+Wed, 23 Jan 2013 13:37:04 +0000
+1. Simply draw out a rectangular selection with the marquee tool
+2. Then goto Select-&gt;Modify-&gt;Smooth. Then set the radius size depending on how round you want the corners in the selection to be.
+--------------------------------------------------------------------------------
+PHP - Find all IP addresses in txt file
+Wed, 23 Jan 2013 16:19:40 +0000
+#!/usr/bin/php
+&lt;?php
+
+if ($argc == 2 &amp;&amp; file_exists($argv[1])) {
+
+$file = file_get_contents($argv[1]);
+$regex = '/([\d]{1,3}\.){3}[\d]{1,3}/';
+
+$matches = array();
+$num = preg_match_all($regex, $file, $matches);
+
+fwrite(STDOUT, ""Found "" . $num . "" matches:\n"");
+
+foreach($matches[0] as $match) {
+fwrite(STDOUT, $match . ""\n"");
+}
+} else {
+fwrite(STDOUT, ""Please supply a file to process.\n"");
+}
+
+exit(0);
+?&gt;
+--------------------------------------------------------------------------------
+Telnet on Fritz!Box
+Wed, 23 Jan 2013 19:29:22 +0000
+#96*7* Telnet on
+#96*8* Telnet off
+--------------------------------------------------------------------------------
+Debug on Juniper
+Wed, 23 Jan 2013 19:30:06 +0000
+&gt; undebug all
+
+&gt; clear db
+
+&gt; debug ....
+
+&gt; get db stream
+
+&gt; undebug all
+--------------------------------------------------------------------------------
+Ubuntu Server install clean Desktop
+Wed, 24 Jul 2013 14:47:57 +0000
+
+apt-get install --no-install-recommends ubuntu-desktop
+--------------------------------------------------------------------------------
+ESXi Harddisk SMART status
+Wed, 25 Mar 2015 07:47:52 +0000
+
+/usr/lib/vmware/vm-support/bin/smartinfo.sh<"
