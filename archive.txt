@@ -649,54 +649,6 @@ Unlock item:
 
 chattr -i &lt;item name&gt;
 --------------------------------------------------------------------------------
-Certificates openssl
-Thu, 21 Aug 2014 10:45:22 +0000
-<strong>Generate a new private key and Certificate Signing Request:</strong>
-
-openssl req -out filename.csr -new -newkey rsa:2048 -nodes -keyout filename.key -sha256<
-
-openssl req -out filename.csr -new -newkey rsa:4096 -nodes -keyout filename.key -sha256<
-<strong>Self-Sign the certificate:</strong>
-
-openssl x509 -req -days 3650 -in filename.csr -signkey filename.key -out filename.crt<
-<strong>Check a Certificate Signing Request:</strong>
-
-openssl req -text -noout -verify -in filename.csr<
-<strong>Check certificate:</strong>
-
-openssl x509 -in filename.crt -text -noout<
-<strong>Check if certificate and key match:</strong>
-
-openssl x509 -noout -modulus -in filename.crt | openssl md5 ; openssl rsa -noout -modulus -in filename.key | openssl md5<
-<strong>Convert certificate with key to PKCS#12 certificate (with Intermediate and Root certificate):</strong>
-Create new crt file like this:
-
------ BEGIN CERT -----
-&lt; Own Certificate &gt;
------ END CERT -----
------ BEGIN CERT -----
-&lt; Intermediate Certificate &gt;
------ END CERT -----
------ BEGIN CERT -----
-&lt; Root Certificate &gt;
------ END CERT -----
-
-sudo openssl pkcs12 -export -in combinedfilename.crt -inkey filename.key -out filename.p12<
-<strong>Check PKCS#12 certificate:</strong>
-
-openssl pkcs12 -info -in filename.p12<
-<strong>Convert PKCS#12 certificate to <strong>certificate with key:</strong></strong>
-
-openssl pkcs12 -in filename.p12 -clcerts -nokeys -out combinedfilename.cer<
-
-openssl pkcs12 -in filename.p12 -nocerts -nodes  -out filename.key<
-Generate DH parameters:
-
-sudo openssl dhparam -out dhparam.pem 2048<
-
-sudo openssl dhparam -out dhparam.pem 4096<
-
---------------------------------------------------------------------------------
 Windows XP -> 7 Auto Login
 Thu, 24 Jan 2013 12:46:30 +0000
 control userpasswords2
