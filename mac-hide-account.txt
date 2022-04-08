@@ -1,0 +1,9 @@
+https://itectec.com/askdifferent/macos-hide-a-user-account-from-the-login-screen-of-macos-catalina/
+
+hide
+sudo dscl . create /Users/admin IsHidden 1
+unhide
+sudo dscl . create /Users/admin IsHidden 0
+
+sudo fdesetup list
+sudo fdesetup remove -user admin
