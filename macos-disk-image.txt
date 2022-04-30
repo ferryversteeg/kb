@@ -1,0 +1,5 @@
+Create diskimage:
+hdiutil create ./tmp.dmg -ov -fs HFS+ -srcfolder ./folder 
+
+Convert writable image to compressed and not writable:
+hdiutil convert ./tmp.dmg -format UDZO -o diskimage.dmg
