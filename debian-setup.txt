@@ -1,0 +1,24 @@
+Debian setup:
+--------------
+
+- Packages:
+sudo
+vim
+net-tools
+dnsutils
+sendemail
+libio-socket-ssl-perl
+rsync
+
+- Fix perl error:
+sudo localectl set-locale LANGUAGE=en_US.UTF-8
+sudo localectl set-locale LANG=en_US.utf8
+sudo localectl set-locale LC_TIME=en_DK.UTF-8
+sudo locale-gen en_US.UTF-8
+sudo dpkg-reconfigure locales
+
+- Docker
+https://docs.docker.com/engine/install/debian/
+sudo usermod -aG docker admin
+
+install docker compose with script
